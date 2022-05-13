@@ -3,6 +3,7 @@
 * [General info](#general-info)
 * [Technologies](#technologies)
 * [Setup](#setup)
+* [About Developers](#about-developers)
 
 ## General info
 This project is a graphical application which visualizes the most common search algorithms. These algorithms are
@@ -28,3 +29,9 @@ $ clone the repository (git clone https://github.com/bisrat-walle/Search-Algorit
 $ cd Search-Algorithm-Visualizer_Graphics
 $ "python main.py" for windows and "python3 main.py" for linux
 ```
+
+## About Developers
+<pre>
+	1. <a href="https://github.com/bisrat-walle"> Bisrat Walle</a> ....... UGR/4425/12
+	2. <a href="https://github.com/dryeab"> Yeabsira Driba </a>..... UGR/4951/12
+</pre>
