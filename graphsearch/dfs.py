@@ -4,8 +4,8 @@ from collections import deque
 class DFS:
     def __init__(self, graph):
         self.graph = graph
-    
-    def search(self, to_be_searched = -1):
+
+    def search(self, to_be_searched=-1):
         stack = deque([self.graph])
         while stack:
             current = stack.pop()
@@ -17,4 +17,3 @@ class DFS:
             if current.right:
                 stack.append(current.right)
             yield False
-
