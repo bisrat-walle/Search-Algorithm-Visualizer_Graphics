@@ -170,11 +170,6 @@ class GraphAlgorithmVisualizer:
             
             self.drawText("Search Algorithm Visualizer", 350, 30, 30)
             
-            glBegin(GL_LINES)
-            glVertex2d(-3.5, 3.5) 
-            glVertex2d(-2.0, 2.5)
-            glEnd()
-            
             queue = deque([graph])
             i, startY = 0, 5
             while queue:
