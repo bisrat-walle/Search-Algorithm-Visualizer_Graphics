@@ -7,13 +7,11 @@ from collections import deque
 from graphsearch.bfs import *
 from graphsearch.dfs import *
 from graphsearch.random_graph_generator import *
+from helper_widgets.input_box import SearchInputReciever
 
 coordinateSize = (10, 6)
 window_size = (1000, 600)
 pygame.init()
-COLOR_INACTIVE = pygame.Color('lightskyblue3')
-COLOR_ACTIVE = pygame.Color('dodgerblue2')
-FONT = pygame.font.Font(None, 32)
 
 class GraphAlgorithmVisualizer:
     """
@@ -124,25 +122,24 @@ class GraphAlgorithmVisualizer:
         search_generator = None
         iterations = 1
         finished = False
-        input_box1 = InputBox(100, 100, 140, 32)
-        input_boxes = [input_box1]
         while True:
             
             for event in pygame.event.get():
-                for box in input_boxes:
-                    box.handle_event(event)
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == K_1 and not search_generator:
                         print("BFS")
-                        search_generator = BFS(graph).search()
+                        input_ = SearchInputReciever("BFS")
+                        input_.receiveInput()
+                        #search_generator = BFS(graph).search()
                 
                 if event.type == pygame.KEYDOWN:
                     if event.key == K_2 and not search_generator:
                         print("DFS")
-                        search_generator = DFS(graph).search()
+                        #receiveInput("DFS")
+                        #search_generator = DFS(graph).search()
                 
                 if event.type == pygame.KEYDOWN:
                     if event.key == K_3 and search_generator and finished:
@@ -195,9 +192,7 @@ class GraphAlgorithmVisualizer:
                     
                 startY -= 1.5
                 i += 1
-            for box in input_boxes:
-                pygame.Surface.blit(box, self.window, (0, 0))
+                
             pygame.display.flip()
             pygame.time.wait(10)
-            
-            
+
