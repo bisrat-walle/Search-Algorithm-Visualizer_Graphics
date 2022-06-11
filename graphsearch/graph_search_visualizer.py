@@ -122,6 +122,26 @@ class GraphAlgorithmVisualizer:
         glFlush()
         
     def drawKeys(self, searching, alg="BFS", paused=False, completed=False, speed=1):
+        
+        keys_top_right = [
+                ["Unexplored", (3, 3.5), (1, 1, 1)],
+                ["Visited", (3.84, 4.34), (1, 1, 0)], 
+                ["Target", (4.68, 5.18), (0, 0, 1)],
+            ]
+        
+        for index in range(len(keys_top_right)):
+            self.drawText(keys_top_right[index][0], 850, 450+(index)*42, 23, (0, 0, 0))
+        
+        for index in range(len(keys_top_right)):        
+            glColor3fv(keys_top_right[index][2])
+            glBegin(GL_QUADS)
+            glVertex2d(9.0, keys_top_right[index][1][0])
+            glVertex2d(9.5, keys_top_right[index][1][0])
+            glVertex2d(9.5, keys_top_right[index][1][1])
+            glVertex2d(9.0, keys_top_right[index][1][1])
+            glEnd()
+            glFlush()
+    
         def getStatus():
             if completed:
                 return "Completed"
