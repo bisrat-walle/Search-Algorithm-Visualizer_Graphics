@@ -10,6 +10,7 @@ class BFS:
             current = queue.popleft()
             current.visited = True
             if current.value == to_be_searched:
+                current.target = True
                 return True
             if current.left:
                 queue.append(current.left)

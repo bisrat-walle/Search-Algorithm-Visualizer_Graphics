@@ -14,7 +14,7 @@ class SearchInputReciever(Tk):
     
     """
 
-    def __init__(self, arg):
+    def __init__(self, alg):
     
         """
             This function is a constructor that initialized the class UserInput with the necessary attributes
@@ -22,7 +22,7 @@ class SearchInputReciever(Tk):
     
         print("Instantiating SearchInputReciever Class")
         super().__init__()
-        self.arg = arg
+        self.alg = alg
         self.configure(bg="aqua")
         self.target = None
         self.fun_2 = None
@@ -40,7 +40,7 @@ class SearchInputReciever(Tk):
             """
         
             
-            self.target = self.inputtxt.get(1.0, "end-1c")
+            self.target = int(self.inputtxt.get(1.0, "end-1c"))
             self.destroy()
         
         def cancel():
@@ -70,7 +70,7 @@ class SearchInputReciever(Tk):
         
         Frame(self,width=330,height=25,bg="white").place(x=33,y=45)
         font=('Calibri (Body)',15,'bold')
-        app_title = Label(self, text=f'Algorithm: {self.arg}', font=font, bg="#249794")
+        app_title = Label(self, text=f'Algorithm: {self.alg}', font=font, bg="#249794")
         app_title.place(x=110, y=10)
         
         self.inputtxt = tk.Text(self,

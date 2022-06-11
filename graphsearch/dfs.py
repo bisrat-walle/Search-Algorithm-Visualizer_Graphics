@@ -11,6 +11,7 @@ class DFS:
             current = stack.pop()
             current.visited = True
             if current.value == to_be_searched:
+                current.target = True
                 return True
             if current.left:
                 stack.append(current.left)

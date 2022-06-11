@@ -13,6 +13,7 @@ coordinateSize = (10, 6)
 window_size = (1000, 600)
 pygame.init()
 
+
 class GraphAlgorithmVisualizer:
     """
         
@@ -41,7 +42,9 @@ class GraphAlgorithmVisualizer:
         radius = .5
         angle = 2*np.pi/100
         glPolygonMode( GL_FRONT, GL_FILL )
-        if not node.visited:
+        if node.target:
+            glColor3f(0, 0, 1 )
+        elif not node.visited:
             glColor3f(1, 1, 1 )
         else:
             glColor3f(1, 1, 0)
@@ -70,7 +73,10 @@ class GraphAlgorithmVisualizer:
             This function is responsible for drawing text on PyGame window
             
         """
-        if not node.visited:
+        
+        if node.target:
+            textSurface = self.font.render(str(node.value), True, (0,255,0,255), (0,0,255,255))
+        elif not node.visited:
             textSurface = self.font.render(str(node.value), True, (0,255,0,255), (255,255,255,255))
         else:
             textSurface = self.font.render(str(node.value), True, (0,255,0,255), (255,255,0,255))
@@ -114,28 +120,35 @@ class GraphAlgorithmVisualizer:
         glEnd()
         glFlush()
         
-    def drawKeys(self):
-        keys_left1 = [
-                "3 = RESET",
+    def drawKeys(self, searching, alg="BFS", paused=False, completed=False, speed=1):
+        def getStatus():
+            if completed:
+                return "Completed"
+            elif paused:
+                return "Paused"
+            return "Searching"
+        keys_left = [
                 "2 = DFS", 
                 "1 = BFS",
-            ]
-        keys_left2 = [
-                "Current Status: Playing",
-                "Current Speed: 1",
-                "Algorithm = BFS"
+            ] if not searching else  [
+                f"Current Status: {getStatus()}",
+                f"Current Speed: {speed}",
+                f"Algorithm = {alg}"
             ]
         keys_right = [
-                "SPACE = PAUSE",
+                "SPACE = PAUSE/RESUME",
                 "↓ = SPEED DOWN", 
                 "↑ = SPEED UP",
             ]
             
             
-        for index in range(len(keys_left2)):
-            self.drawText(keys_left2[index], 10, 10+(index)*42, 23, (25.5, 102, 127.5))
-        for index in range(len(keys_right)):
-            self.drawText(keys_right[index], 750, 10+(index)*42, 23, (25.5, 102, 127.5))
+        for index in range(len(keys_left)):
+            self.drawText(keys_left[index], 10, 10+(index)*42, 23, (25.5, 102, 127.5))
+        if searching:
+            for index in range(len(keys_right)):
+                self.drawText(keys_right[index], 750, 10+(index)*42, 23, (25.5, 102, 127.5))
+        if completed:
+            self.drawText("3 = RESET", 450, 94, 23, (25.5, 102, 127.5))
     
     
     def reset(self, graph):
@@ -143,6 +156,7 @@ class GraphAlgorithmVisualizer:
         while queue:
             current = queue.popleft()
             current.visited = False
+            current.target = False
             if current.left:
                 queue.append(current.left)
             if current.right:
@@ -155,6 +169,7 @@ class GraphAlgorithmVisualizer:
         search_generator = None
         iterations = 1
         finished = False
+        paused = False
         while True:
             
             for event in pygame.event.get():
@@ -164,34 +179,37 @@ class GraphAlgorithmVisualizer:
                 if event.type == pygame.KEYDOWN:
                     if event.key == K_1 and not search_generator:
                         input_ = SearchInputReciever("BFS")
-                        #search_generator = BFS(graph).search()
-                
-                if event.type == pygame.KEYDOWN:
+                        target = input_.get_target()
+                        if target != -1:
+                            search_generator = BFS(graph).search(target)
+                            
                     if event.key == K_2 and not search_generator:
                         input_ = SearchInputReciever("DFS")
-                        #search_generator = DFS(graph).search()
-                
-                if event.type == pygame.KEYDOWN:
+                        target = input_.get_target()
+                        if target != -1:
+                            search_generator = DFS(graph).search(target)
+                            
                     if event.key == K_3 and search_generator and finished:
                         print("RESET")
                         self.reset(graph)
                         iterations = 1
                         search_generator = None
                         finished = False
+                    
+                    if event.key == K_SPACE and search_generator and not finished:
+                        paused = not paused
                         
-            if not finished and search_generator and iterations/5 == int(iterations/5):
+            if not finished and not paused and search_generator and iterations/5 == int(iterations/5):
                 try:
                     search_generator.__next__()
                 except StopIteration:
                     finished = True
-                    pass
                     
             iterations += 1
             glClear(GL_COLOR_BUFFER_BIT)
             
             self.drawFooterBackground()
-            
-            self.drawKeys()
+            self.drawKeys(search_generator != None, input_.alg if search_generator else "Unknown", paused, finished)
             
             self.drawText("Search Algorithm Visualizer", 350, 30, 30, (25.5, 102, 127.5))
             

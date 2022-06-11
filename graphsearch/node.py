@@ -4,6 +4,7 @@ class Node:
         self.visited = False
         self.right = None
         self.left = None
+        self.target = False
     
     
     def __str__(self):
