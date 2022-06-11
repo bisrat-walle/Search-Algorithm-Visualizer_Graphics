@@ -80,8 +80,18 @@ class GraphAlgorithmVisualizer:
         textHeight = textSurface.get_height()
         glDrawPixels(textWidth, textHeight, GL_RGBA, GL_UNSIGNED_BYTE, text_data)
     
-    def drawText(self, text, x, y, fontSize=25):
-        textSurface = pygame.font.SysFont('arial', fontSize).render(text, True, (0,255,0,255), (255,255,255,255))
+    def drawFooterBackground(self):
+        glColor3f(0.1, .4, .5)
+        glBegin(GL_QUADS)
+        glVertex2d(-10, -3)
+        glVertex2d(10, -3)
+        glVertex2d(10, -6)
+        glVertex2d(-10, -6)
+        glEnd()
+        glFlush()
+    
+    def drawText(self, text, x, y, fontSize=25, color=(255,255,255,255)):
+        textSurface = pygame.font.SysFont('arial', fontSize).render(text, True, (0,255,0,255), color)
         text_data = pygame.image.tostring(textSurface, "RGBA", True)
         glWindowPos2d(x, y)
         textWidth = textSurface.get_width()
@@ -103,6 +113,29 @@ class GraphAlgorithmVisualizer:
         glVertex2d(tempX-helper[i+1][1]/2, startY-1)
         glEnd()
         glFlush()
+        
+    def drawKeys(self):
+        keys_left1 = [
+                "3 = RESET",
+                "2 = DFS", 
+                "1 = BFS",
+            ]
+        keys_left2 = [
+                "Current Status: Playing",
+                "Current Speed: 1",
+                "Algorithm = BFS"
+            ]
+        keys_right = [
+                "SPACE = PAUSE",
+                "↓ = SPEED DOWN", 
+                "↑ = SPEED UP",
+            ]
+            
+            
+        for index in range(len(keys_left2)):
+            self.drawText(keys_left2[index], 10, 10+(index)*42, 23, (25.5, 102, 127.5))
+        for index in range(len(keys_right)):
+            self.drawText(keys_right[index], 750, 10+(index)*42, 23, (25.5, 102, 127.5))
     
     
     def reset(self, graph):
@@ -152,24 +185,15 @@ class GraphAlgorithmVisualizer:
                 except StopIteration:
                     finished = True
                     pass
-            
-            
-            keys = [
-                "3 = RESET",
-                "2 = DFS", 
-                "1 = BFS",
-            ]
-            
-            
-            
-            
+                    
             iterations += 1
             glClear(GL_COLOR_BUFFER_BIT)
             
-            for index in range(len(keys)):
-                self.drawText(keys[index], 10, 10+(index)*42)
+            self.drawFooterBackground()
             
-            self.drawText("Search Algorithm Visualizer", 350, 30, 30)
+            self.drawKeys()
+            
+            self.drawText("Search Algorithm Visualizer", 350, 30, 30, (25.5, 102, 127.5))
             
             queue = deque([graph])
             i, startY = 0, 5
