@@ -8,6 +8,7 @@ from graphsearch.bfs import *
 from graphsearch.dfs import *
 from graphsearch.random_graph_generator import *
 from helper_widgets.input_box_tk import SearchInputReciever
+import time
 
 coordinateSize = (10, 6)
 window_size = (1000, 600)
@@ -167,9 +168,10 @@ class GraphAlgorithmVisualizer:
         graph = randomly_generate_graph()
         helper = {0:[0, 0], 1:[-4, 8], 2:[-6, 4], 3:[-7, 2]}
         search_generator = None
-        iterations = 1
         finished = False
         paused = False
+        last_time = None
+        speed = 1
         while True:
             
             for event in pygame.event.get():
@@ -182,34 +184,45 @@ class GraphAlgorithmVisualizer:
                         target = input_.get_target()
                         if target != -1:
                             search_generator = BFS(graph).search(target)
+                        last_time = time.time()
                             
                     if event.key == K_2 and not search_generator:
                         input_ = SearchInputReciever("DFS")
                         target = input_.get_target()
                         if target != -1:
                             search_generator = DFS(graph).search(target)
+                        last_time = time.time()
                             
                     if event.key == K_3 and search_generator and finished:
                         print("RESET")
                         self.reset(graph)
-                        iterations = 1
                         search_generator = None
                         finished = False
+                        speed = 1
                     
                     if event.key == K_SPACE and search_generator and not finished:
                         paused = not paused
+                        last_time = time.time()
+                    
+                    if event.key == K_UP and search_generator and not finished:
+                        speed = min(4, speed+1)
                         
-            if not finished and not paused and search_generator and iterations/5 == int(iterations/5):
+                    if event.key == K_DOWN and search_generator and not finished:
+                        speed = max(1, speed-1)
+                        
+                        
+            if not finished and not paused and search_generator and time.time() >= last_time+.5*(4-speed):
                 try:
                     search_generator.__next__()
                 except StopIteration:
                     finished = True
-                    
-            iterations += 1
+                    speed = 1
+                last_time = time.time()
+                
             glClear(GL_COLOR_BUFFER_BIT)
             
             self.drawFooterBackground()
-            self.drawKeys(search_generator != None, input_.alg if search_generator else "Unknown", paused, finished)
+            self.drawKeys(search_generator != None, input_.alg if search_generator else "Unknown", paused, finished, speed)
             
             self.drawText("Search Algorithm Visualizer", 350, 30, 30, (25.5, 102, 127.5))
             
