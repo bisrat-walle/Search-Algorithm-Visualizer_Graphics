@@ -6,7 +6,7 @@ import time
 
 
 
-class UserInput(Tk):
+class SearchInputReciever(Tk):
 
     """
     
@@ -14,14 +14,15 @@ class UserInput(Tk):
     
     """
 
-    def __init__(self):
+    def __init__(self, arg):
     
         """
             This function is a constructor that initialized the class UserInput with the necessary attributes
         """
     
-        print("Instantiating User Input Reciever Class")
+        print("Instantiating SearchInputReciever Class")
         super().__init__()
+        self.arg = arg
         self.configure(bg="aqua")
         self.target = None
         self.fun_2 = None
@@ -39,6 +40,7 @@ class UserInput(Tk):
             """
         
             
+            self.target = self.inputtxt.get(1.0, "end-1c")
             self.destroy()
         
         def cancel():
@@ -51,6 +53,7 @@ class UserInput(Tk):
             """
         
             
+            self.target = -1
             self.destroy()
             
             
@@ -59,23 +62,25 @@ class UserInput(Tk):
         screen_height = self.winfo_screenheight()
         window_width = 400
         window_height = 150
-        self.geometry(f'{window_width}x{window_height}+{int((screen_width-window_width)/2)}+{int((screen_height-window_height)/2)}')
+        self.geometry(f'{window_width}x{window_height}+{int((screen_width-window_width)/2)}+{int((screen_height-window_height)/2)+100}')
         
+        self.overrideredirect(1)
+        self.attributes('-topmost', 1)
         Frame(self,width=500,height=285,bg="#249794").place(x=0,y=0)
         
         Frame(self,width=330,height=25,bg="white").place(x=33,y=45)
         font=('Calibri (Body)',15,'bold')
-        app_title = Label(self, text='Algorithm: BFS', font=font, bg="#249794")
+        app_title = Label(self, text=f'Algorithm: {self.arg}', font=font, bg="#249794")
         app_title.place(x=110, y=10)
         
-        inputtxt = tk.Text(self,
+        self.inputtxt = tk.Text(self,
                    height = 1,
                    width = 10)
         
         font=('Calibri (Body)',10,'bold')
         label1=Label(self,text="Enter the number to be searched: ", font=font, bg="white")
         label1.place(x=35, y=45)
-        inputtxt.place(x=270, y=47)
+        self.inputtxt.place(x=270, y=47)
         
         
         font=('Calibri (Body)',15,'bold')
@@ -88,7 +93,7 @@ class UserInput(Tk):
         self.mainloop()
         
     
-    def get_user_input(self):
+    def get_target(self):
         
         """
             
@@ -96,6 +101,4 @@ class UserInput(Tk):
         
         """
     
-        return self.fun_1, self.fun_2
-
-UserInput()
+        return self.target

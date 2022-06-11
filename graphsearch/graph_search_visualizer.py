@@ -7,7 +7,7 @@ from collections import deque
 from graphsearch.bfs import *
 from graphsearch.dfs import *
 from graphsearch.random_graph_generator import *
-from helper_widgets.input_box import SearchInputReciever
+from helper_widgets.input_box_tk import SearchInputReciever
 
 coordinateSize = (10, 6)
 window_size = (1000, 600)
@@ -130,15 +130,12 @@ class GraphAlgorithmVisualizer:
                     quit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == K_1 and not search_generator:
-                        print("BFS")
                         input_ = SearchInputReciever("BFS")
-                        input_.receiveInput()
                         #search_generator = BFS(graph).search()
                 
                 if event.type == pygame.KEYDOWN:
                     if event.key == K_2 and not search_generator:
-                        print("DFS")
-                        #receiveInput("DFS")
+                        input_ = SearchInputReciever("DFS")
                         #search_generator = DFS(graph).search()
                 
                 if event.type == pygame.KEYDOWN:
