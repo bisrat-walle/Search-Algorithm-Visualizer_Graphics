@@ -106,6 +106,7 @@ class GraphAlgorithmVisualizer:
         glDrawPixels(textWidth, textHeight, GL_RGBA, GL_UNSIGNED_BYTE, text_data)
     
     def draw_edge_to_right_child(self, tempX, startY, helper, i):
+        glLineWidth(3)
         glColor3f(0, 1, 0)
         glBegin(GL_LINES)
         glVertex2d(tempX+.5, startY)
@@ -114,6 +115,7 @@ class GraphAlgorithmVisualizer:
         glFlush()
     
     def draw_edge_to_left_child(self, tempX, startY, helper, i):
+        glLineWidth(3)
         glColor3f(0, 1, 0)
         glBegin(GL_LINES)
         glVertex2d(tempX-.5, startY)
