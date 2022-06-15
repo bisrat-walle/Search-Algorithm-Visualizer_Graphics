@@ -97,26 +97,26 @@ class GraphAlgorithmVisualizer:
         glEnd()
         glFlush()
     
-    def drawText(self, text, x, y, fontSize=25, color=(255,255,255,255)):
-        textSurface = pygame.font.SysFont('arial', fontSize).render(text, True, (0,255,0,255), color)
+    def drawText(self, text, x, y, fontSize=20, color=(255,255,255,255)):
+        textSurface = pygame.font.SysFont('monospace', fontSize).render(text, True, (0,255,0,255), color)
         text_data = pygame.image.tostring(textSurface, "RGBA", True)
         glWindowPos2d(x, y)
         textWidth = textSurface.get_width()
         textHeight = textSurface.get_height()
         glDrawPixels(textWidth, textHeight, GL_RGBA, GL_UNSIGNED_BYTE, text_data)
     
-    def draw_edge_to_right_child(self, tempX, startY, helper, i):
+    def draw_edge_to_right_child(self, tempX, startY, helper, i, color=(0, 1, 0)):
         glLineWidth(3)
-        glColor3f(0, 1, 0)
+        glColor3fv(color)
         glBegin(GL_LINES)
         glVertex2d(tempX+.5, startY)
         glVertex2d(tempX+helper[i+1][1]/2, startY-1)
         glEnd()
         glFlush()
     
-    def draw_edge_to_left_child(self, tempX, startY, helper, i):
+    def draw_edge_to_left_child(self, tempX, startY, helper, i, color=(0, 1, 0)):
         glLineWidth(3)
-        glColor3f(0, 1, 0)
+        glColor3fv(color)
         glBegin(GL_LINES)
         glVertex2d(tempX-.5, startY)
         glVertex2d(tempX-helper[i+1][1]/2, startY-1)
@@ -132,7 +132,7 @@ class GraphAlgorithmVisualizer:
             ]
         
         for index in range(len(keys_top_right)):
-            self.drawText(keys_top_right[index][0], 850, 450+(index)*42, 23, (0, 0, 0))
+            self.drawText(keys_top_right[index][0], 820, 450+(index)*42, 18, (0, 0, 0))
         
         for index in range(len(keys_top_right)):        
             glColor3fv(keys_top_right[index][2])
@@ -159,19 +159,19 @@ class GraphAlgorithmVisualizer:
                 f"Algorithm = {alg}"
             ]
         keys_right = [
-                "SPACE = PAUSE/RESUME",
-                "↓ = SPEED DOWN", 
-                "↑ = SPEED UP",
+                "Space = Pause/Resume",
+                "↓     = Speed down", 
+                "↑     = Speed up",
             ]
             
             
         for index in range(len(keys_left)):
-            self.drawText(keys_left[index], 10, 10+(index)*42, 23, (25.5, 102, 127.5))
+            self.drawText(keys_left[index], 10, 10+(index)*42, 18, (25.5, 102, 127.5))
         if searching:
             for index in range(len(keys_right)):
-                self.drawText(keys_right[index], 750, 10+(index)*42, 23, (25.5, 102, 127.5))
+                self.drawText(keys_right[index], 750, 10+(index)*42, 18, (25.5, 102, 127.5))
         if completed:
-            self.drawText("3 = RESET", 450, 94, 23, (25.5, 102, 127.5))
+            self.drawText("3 = RESET", 450, 94, 18, (25.5, 102, 127.5))
     
     
     def reset(self, graph):
@@ -246,7 +246,7 @@ class GraphAlgorithmVisualizer:
             self.drawFooterBackground()
             self.drawKeys(search_generator != None, input_.alg if search_generator else "Unknown", paused, finished, speed)
             
-            self.drawText("Search Algorithm Visualizer", 350, 30, 30, (25.5, 102, 127.5))
+            self.drawText("Search Algorithm Visualizer", 300, 30, 25, (25.5, 102, 127.5))
             
             queue = deque([graph])
             i, startY = 0, 5
@@ -257,10 +257,16 @@ class GraphAlgorithmVisualizer:
                     current = queue.popleft()
                     self.draw_node(tempX, startY, current)
                     if current.left:
-                        self.draw_edge_to_left_child(tempX, startY, helper, i)
+                        if current.left.visited:
+                            self.draw_edge_to_left_child(tempX, startY, helper, i, (0.1, .4, .5))
+                        else:
+                            self.draw_edge_to_left_child(tempX, startY, helper, i)
                         queue.append(current.left)
                     if current.right:
-                        self.draw_edge_to_right_child(tempX, startY, helper, i)
+                        if current.left.visited:
+                            self.draw_edge_to_right_child(tempX, startY, helper, i, (0.1, .4, .5))
+                        else:
+                            self.draw_edge_to_right_child(tempX, startY, helper, i)
                         queue.append(current.right)
                     tempX += helper[i][1]
                     
