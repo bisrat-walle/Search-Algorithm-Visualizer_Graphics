@@ -263,7 +263,7 @@ class GraphAlgorithmVisualizer:
                             self.draw_edge_to_left_child(tempX, startY, helper, i)
                         queue.append(current.left)
                     if current.right:
-                        if current.left.visited:
+                        if current.right.visited:
                             self.draw_edge_to_right_child(tempX, startY, helper, i, (0.1, .4, .5))
                         else:
                             self.draw_edge_to_right_child(tempX, startY, helper, i)
