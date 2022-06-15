@@ -155,8 +155,8 @@ class GraphAlgorithmVisualizer:
                 "1 = BFS",
             ] if not searching else  [
                 f"Current Status: {getStatus()}",
-                f"Current Speed: {speed}",
-                f"Algorithm = {alg}"
+                f"Current Speed : {speed}",
+                f"Algorithm     : {alg}"
             ]
         keys_right = [
                 "Space = Pause/Resume",
