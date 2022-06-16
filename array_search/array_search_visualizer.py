@@ -27,66 +27,65 @@ class ArraySearchAlgorithmVisualizer:
 
         j = 0
         for i in range(-10, 10, 2):
-            drawNode(i + 1, 1, array[j])
+            self.drawNode(i + 1, 1, array[j])
             j += 1
 
+    def drawNode(self, ox: int, oy: int, node: Node):
+        """ Draws a circle with radius <r> from origin <ox, oy> """
 
-def drawNode(ox: int, oy: int, node: Node):
-    """ Draws a circle with radius <r> from origin <ox, oy> """
+        r = .65  # radius
+        angle = 2 * np.pi/100
+        gray = 128, 128, 128
+        green = 0, 255, 0
+        light_gray = 220, 220, 220
 
-    r = .65  # radius
-    angle = 2 * np.pi/100
-    gray = 128, 128, 128
-    green = 0, 255, 0
-    light_gray = 220, 220, 220
+        def drawNodeValue(x: int, y: int, node: Node, fontSize: int = 25):
+            """ Writes a text on the window """
 
-    def drawNodeValue(x: int, y: int, node: Node, fontSize: int = 25):
-        """ Writes a text on the window """
+            bg = None
 
-        bg = None
+            if node.isTarget:
+                bg = (*green, 255)
+            elif node.visited:
+                bg = (*gray, 255)
+            elif node.visiting:
+                bg = (*light_gray, 255)
+            else:
+                bg = (255, 255, 255, 255)
+
+            textSurface = pygame.font.SysFont('arial', fontSize).render(
+                str(node.val), True, (47, 79, 79, 255), bg)
+            textData = pygame.image.tostring(textSurface, "RGBA", True)
+
+            glWindowPos2d(x, y)
+            glDrawPixels(textSurface.get_width(), textSurface.get_height(),
+                         GL_RGBA, GL_UNSIGNED_BYTE, textData)
+
+        glPolygonMode(GL_FRONT, GL_FILL)
 
         if node.isTarget:
-            bg = (*green, 255)
+            glColor3f(green[0]/256, green[1]/256, green[2]/256)
         elif node.visited:
-            bg = (*gray, 255)
+            glColor3f(gray[0]/256, gray[1]/256, gray[2]/256)
         elif node.visiting:
-            bg = (*light_gray, 255)
+            glColor3f(light_gray[0]/256, light_gray[1]/256, light_gray[2]/256)
         else:
-            bg = (255, 255, 255, 255)
+            glColor3f(1, 1, 1)
 
-        textSurface = pygame.font.SysFont('arial', fontSize).render(
-            str(node.val), True, (47, 79, 79, 255), bg)
-        textData = pygame.image.tostring(textSurface, "RGBA", True)
+        glBegin(GL_POLYGON)
 
-        glWindowPos2d(x, y)
-        glDrawPixels(textSurface.get_width(), textSurface.get_height(),
-                     GL_RGBA, GL_UNSIGNED_BYTE, textData)
+        angle1 = 0.0
+        glVertex2d(ox+r * np.cos(0.0), oy+r * np.sin(0.0))
+        for i in range(100):
+            glVertex2d(ox+r * np.cos(angle1),
+                       oy+r * np.sin(angle1))
+            angle1 += angle
 
-    glPolygonMode(GL_FRONT, GL_FILL)
+        glEnd()
+        glFlush()
 
-    if node.isTarget:
-        glColor3f(green[0]/256, green[1]/256, green[2]/256)
-    elif node.visited:
-        glColor3f(gray[0]/256, gray[1]/256, gray[2]/256)
-    elif node.visiting:
-        glColor3f(light_gray[0]/256, light_gray[1]/256, light_gray[2]/256)
-    else:
-        glColor3f(1, 1, 1)
-
-    glBegin(GL_POLYGON)
-
-    angle1 = 0.0
-    glVertex2d(ox+r * np.cos(0.0), oy+r * np.sin(0.0))
-    for i in range(100):
-        glVertex2d(ox+r * np.cos(angle1),
-                   oy+r * np.sin(angle1))
-        angle1 += angle
-
-    glEnd()
-    glFlush()
-
-    drawNodeValue(window_size[0]/2+ox*window_size[0]/(coordinateSize[0]*2) - 9,
-                  window_size[1]/2+oy*window_size[1]/(coordinateSize[1]*2)-14, node)
+        drawNodeValue(window_size[0]/2+ox*window_size[0]/(coordinateSize[0]*2) - 9,
+                      window_size[1]/2+oy*window_size[1]/(coordinateSize[1]*2)-14, node)
 
 
 def drawKeys(searching, alg="BFS", paused=False, completed=False, speed=1):
