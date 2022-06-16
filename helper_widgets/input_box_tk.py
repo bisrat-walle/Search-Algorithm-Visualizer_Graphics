@@ -20,7 +20,7 @@ class SearchInputReciever(Tk):
             This function is a constructor that initialized the class UserInput with the necessary attributes
         """
     
-        print("Instantiating SearchInputReciever Class")
+        print("Instantiating SpecificAlgorithmInputReciever Class")
         super().__init__()
         self.alg = alg
         self.configure(bg="aqua")
