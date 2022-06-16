@@ -16,7 +16,7 @@ class SplashUserInput(Tk):
         """
             This function is a constructor that initialized the class UserInput with the necessary attributes
         """
-        print("Instantiating User Input Reciever Class")
+        print("Instantiating Algorithm Type Reciever Class")
         super().__init__()
         self.configure(bg="aqua")
         self.choosen = "Graph Search"
