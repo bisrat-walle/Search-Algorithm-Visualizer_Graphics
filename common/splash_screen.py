@@ -19,8 +19,9 @@ class SplashUserInput(Tk):
         print("Instantiating Algorithm Type Reciever Class")
         super().__init__()
         self.configure(bg="aqua")
-        self.choosen = "Graph Search"
+        self.choosen = None
         self.resizable(False, False)
+        self.visualize = False
         
         Frame(self,width=500,height=285,bg="#249794").place(x=0,y=0)
         
@@ -40,6 +41,7 @@ class SplashUserInput(Tk):
                 self.update_idletasks()
                 time.sleep(0.015)
             self.choosen = algorithm.get()
+            self.visualize = True
             self.destroy()
             
             
@@ -52,19 +54,19 @@ class SplashUserInput(Tk):
         
         Frame(self,width=500,height=285,bg="#249794").place(x=0,y=0)
         
-        Frame(self,width=380,height=50,bg="white").place(x=65,y=80)
+        Frame(self,width=380,height=50,bg="white").place(x=65,y=110)
         font=('Calibri (Body)',15,'bold')
         app_title = Label(self, text='Welocme to Search Algorithm Visualizer', font=font, bg="#249794")
-        app_title.place(x=55, y=20)
+        app_title.place(x=55, y=50)
         
         
         font=('Calibri (Body)',10,'bold')
         algorithm_type = ['Graph Search', 'Array Search']
         label1=Label(self,text="Choose the algorithm type", font=font, bg="white")
-        label1.place(x=65, y=90)
+        label1.place(x=68, y=120)
         algorithm = ttk.Combobox(self,values=algorithm_type, state="readonly",
                          font = font)
-        algorithm.place(x=270, y=90)
+        algorithm.place(x=268, y=120)
         algorithm.current(0)
         
         
@@ -86,4 +88,6 @@ class SplashUserInput(Tk):
         self.mainloop()
     
     def getInput(self):
-        return self.choosen
+        if self.visualize:
+            return self.choosen
+        return None
