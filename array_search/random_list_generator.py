@@ -1,8 +1,10 @@
 import random
+from node import *
 
-def random_list_generator(sort: bool = False, n: int = 10):
+
+def random_list_generator(sort: bool = False, n: int = 8):
     """ Generates a random list of length <n> """
 
-    lst = [int(random.random() * 20) for _ in range(n)]
+    lst = [Node(int(random.random() * 9)) for _ in range(n)]
 
-    return sorted(lst) if sort else lst
+    return sorted(lst, key=lambda x: x.val) if sort else lst

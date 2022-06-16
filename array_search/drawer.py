@@ -6,8 +6,9 @@ from OpenGL.GLU import *
 from pygame.locals import *
 import numpy as np
 from node import *
+from random_list_generator import *
 
-coordinateSize = (10, 10)
+coordinateSize = (13, 13)
 window_size = (800, 800)
 
 
@@ -33,14 +34,16 @@ def drawText(x: int, y: int, node: Node, fontSize: int = 25):
 
 def drawArray(arr):
 
-    for i in range(-10, 10, 2):
-        drawCircle(i, 0, Node(10))
+    j = 0
+    for i in range(-12, 12, 3):
+        drawCircle(i + 1.5, 0, arr[j])
+        j += 1
 
 
 def drawCircle(ox: int, oy: int, node: Node):
     """ Draws a circle with radius <r> from origin <ox, oy> """
 
-    r = 0.8  # radius
+    r = 1  # radius
 
     glPolygonMode(GL_FRONT, GL_FILL)
 
@@ -76,7 +79,10 @@ def main():
 
     glClearColor(0.6367, 0.8359, 0.9570, 1.0)
 
-    gluOrtho2D(-12.0, 12.0, -12.0, 12.0)
+    xc, yc = coordinateSize
+    gluOrtho2D(-xc, xc, -yc, yc)
+
+    arr = random_list_generator()
 
     while True:
         for event in pygame.event.get():
@@ -85,10 +91,7 @@ def main():
                 quit()
         glClear(GL_COLOR_BUFFER_BIT)
 
-        node = Node(4)
-        node.visited = True
-
-        drawCircle(0, 0, node)
+        drawArray(arr)
 
         pygame.display.flip()
         pygame.time.wait(10)
