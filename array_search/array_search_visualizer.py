@@ -148,7 +148,7 @@ class ArraySearchAlgorithmVisualizer:
             drawText("3 = RESET", 450, 94, 18, (25.5, 102, 127.5))
 
 
-    def drawFooterBackground():
+    def drawFooterBackground(self):
 
         glColor3f(0.1, .4, .5)
         glBegin(GL_QUADS)
@@ -160,22 +160,23 @@ class ArraySearchAlgorithmVisualizer:
         glFlush()
 
 
-def reset(array):
+    def reset(self, array):
 
-    for x in array:
-        x.isTarget = False
-        x.visited = False
+        for x in array:
+            x.isTarget = False
+            x.visited = False
+            x.visiting = False
 
 
-def drawText(text, x, y, fontSize=20, color=(255, 255, 255, 255), forg=(0, 255, 0, 255)):
-    textSurface = pygame.font.SysFont('monospace', fontSize).render(
-        text, True, forg, color)
-    text_data = pygame.image.tostring(textSurface, "RGBA", True)
-    glWindowPos2d(x, y)
-    textWidth = textSurface.get_width()
-    textHeight = textSurface.get_height()
-    glDrawPixels(textWidth, textHeight, GL_RGBA,
-                 GL_UNSIGNED_BYTE, text_data)
+    def drawText(text, x, y, fontSize=20, color=(255, 255, 255, 255), forg=(0, 255, 0, 255)):
+        textSurface = pygame.font.SysFont('monospace', fontSize).render(
+            text, True, forg, color)
+        text_data = pygame.image.tostring(textSurface, "RGBA", True)
+        glWindowPos2d(x, y)
+        textWidth = textSurface.get_width()
+        textHeight = textSurface.get_height()
+        glDrawPixels(textWidth, textHeight, GL_RGBA,
+                    GL_UNSIGNED_BYTE, text_data)
 
 
 def main():
