@@ -15,4 +15,4 @@ if __name__ == "__main__":
             print(f"Result {result}")
         else:
             result = ArraySearchAlgorithmVisualizer().result()
-    print("The applicatin has been terminated!")
+    print("The application has been terminated!")
