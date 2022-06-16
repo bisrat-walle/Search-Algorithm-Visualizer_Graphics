@@ -38,9 +38,14 @@ class SearchInputReciever(Tk):
             
             """
         
-            
-            self.target = int(self.inputtxt.get(1.0, "end-1c"))
-            self.destroy()
+            try:
+                self.target = int(self.inputtxt.get(1.0, "end-1c"))
+                self.destroy()
+            except ValueError:
+                print("Invalid input")
+                self.inputtxt.delete('1.0',END)
+                self.inputtxt.insert(END, "")
+                
         
         def cancel():
         
