@@ -46,13 +46,19 @@ class GraphAlgorithmVisualizer:
     def draw_node(self, posX, posY, node):
         radius = .5
         angle = 2*np.pi/100
+        
+        gray = 128, 128, 128
+        green = 0, 255, 0
+        light_gray = 220/255, 220/255, 220/255
+        
         glPolygonMode(GL_FRONT, GL_FILL)
         if node.target:
-            glColor3f(0, 0, 1)
+            glColor3f(0, 1, 0)
+            self.found = True
         elif not node.visited:
             glColor3f(1, 1, 1)
         else:
-            glColor3f(1, 1, 0)
+            glColor3f(*light_gray)
         glBegin(GL_POLYGON)
 
         angle1 = 0.0
@@ -72,21 +78,24 @@ class GraphAlgorithmVisualizer:
                                window_size[1]/2+posY*window_size[1]/(coordinateSize[1]*2)-21)
 
     def drawNodeValue(self, node, x, y):
+        light_gray = 220, 220, 220
         """
 
             This function is responsible for drawing text on PyGame window
 
         """
+        white = (255, 255, 255, 255)
+        fg = (47, 79, 79, 255)
 
         if node.target:
             textSurface = self.font.render(
-                str(node.value), True, (0, 255, 0, 255), (0, 0, 255, 255))
+                str(node.value), True, fg, (0, 255, 0, 255))
         elif not node.visited:
             textSurface = self.font.render(
-                str(node.value), True, (0, 255, 0, 255), (255, 255, 255, 255))
+                str(node.value), True, fg, white)
         else:
             textSurface = self.font.render(
-                str(node.value), True, (0, 255, 0, 255), (255, 255, 0, 255))
+                str(node.value), True, fg, (*light_gray, 255))
         text_data = pygame.image.tostring(textSurface, "RGBA", True)
         glWindowPos2d(x, y)
         textWidth = textSurface.get_width()
@@ -104,9 +113,9 @@ class GraphAlgorithmVisualizer:
         glEnd()
         glFlush()
 
-    def drawText(self, text, x, y, fontSize=20, color=(255, 255, 255, 255)):
+    def drawText(self, text, x, y, fontSize=20, color=(255, 255, 255, 255), fgcolor=(0, 255, 0, 255)):
         textSurface = pygame.font.SysFont('monospace', fontSize).render(
-            text, True, (0, 255, 0, 255), color)
+            text, True, fgcolor, color)
         text_data = pygame.image.tostring(textSurface, "RGBA", True)
         glWindowPos2d(x, y)
         textWidth = textSurface.get_width()
@@ -114,7 +123,7 @@ class GraphAlgorithmVisualizer:
         glDrawPixels(textWidth, textHeight, GL_RGBA,
                      GL_UNSIGNED_BYTE, text_data)
 
-    def draw_edge_to_right_child(self, tempX, startY, helper, i, color=(0, 1, 0)):
+    def draw_edge_to_right_child(self, tempX, startY, helper, i, color=(0.9, .9, .9)):
         glLineWidth(3)
         glColor3fv(color)
         glBegin(GL_LINES)
@@ -123,7 +132,7 @@ class GraphAlgorithmVisualizer:
         glEnd()
         glFlush()
 
-    def draw_edge_to_left_child(self, tempX, startY, helper, i, color=(0, 1, 0)):
+    def draw_edge_to_left_child(self, tempX, startY, helper, i, color=(0.9, .9, 0.9)):
         glLineWidth(3)
         glColor3fv(color)
         glBegin(GL_LINES)
@@ -132,19 +141,31 @@ class GraphAlgorithmVisualizer:
         glEnd()
         glFlush()
 
-    def drawKeys(self, searching, alg="BFS", paused=False, completed=False, speed=1):
+    def drawKeys(self, searching, alg="BFS", paused=False, completed=False, speed=1, target=-1, found=False):
         
-        self.drawText("BackSpace - to Return", 10, 550, 18, (0, 0, 0))
+        bg_color = 163, 214, 245
+        self.drawText("BackSpace - to Return", 10, 550, 18, bg_color, (0, 0, 0))
+        light_gray = 220/255, 220/255, 220/255
+        
+        if searching and not completed:
+            self.drawText(f"Searching for: {target}", 420, 200, 18, bg_color, (0, 0, 0))
+        
+        if searching and completed:
+            if found:
+                self.drawText(f"{target} - Exists!", 430, 200, 18, bg_color, (0, 0, 0))
+            else:
+                self.drawText(f"{target} - Not Found!", 430, 200, 18, bg_color, (0, 0, 0))
+        
         
         keys_top_right = [
             ["Unexplored", (3, 3.5), (1, 1, 1)],
-            ["Visited", (3.84, 4.34), (1, 1, 0)],
-            ["Target", (4.68, 5.18), (0, 0, 1)],
+            ["Visited", (3.84, 4.34), light_gray],
+            ["Target", (4.68, 5.18), (0, 1, 0)],
         ]
 
         for index in range(len(keys_top_right)):
             self.drawText(keys_top_right[index][0],
-                          820, 450+(index)*42, 18, (0, 0, 0))
+                          820, 450+(index)*42, 18, bg_color, (0, 0, 0))
 
         for index in range(len(keys_top_right)):
             glColor3fv(keys_top_right[index][2])
@@ -196,6 +217,7 @@ class GraphAlgorithmVisualizer:
                 queue.append(current.left)
             if current.right:
                 queue.append(current.right)
+        self.found = False
 
     def startVisualizer(self):
         graph = randomly_generate_graph()
@@ -206,6 +228,8 @@ class GraphAlgorithmVisualizer:
         last_time = None
         speed = 1
         running = True
+        self.found = False
+        
         while running:
 
             for event in pygame.event.get():
@@ -236,6 +260,7 @@ class GraphAlgorithmVisualizer:
                         self.reset(graph)
                         search_generator = None
                         finished = False
+                        self.Found = False
                         speed = 1
 
                     if event.key == K_SPACE and search_generator and not finished:
@@ -250,17 +275,22 @@ class GraphAlgorithmVisualizer:
 
             if not finished and not paused and search_generator and time.time() >= last_time+.5*(4-speed):
                 try:
-                    search_generator.__next__()
+                    res = search_generator.__next__()
+                    if res:
+                        self.found = True
+                        raise StopIteration()
                 except StopIteration:
                     finished = True
                     speed = 1
                 last_time = time.time()
-
+            
+            glClearColor(0.6367, 0.8359, 0.9570, 1.0)
             glClear(GL_COLOR_BUFFER_BIT)
 
             self.drawFooterBackground()
             self.drawKeys(search_generator != None,
-                          input_.alg if search_generator else "Unknown", paused, finished, speed)
+                          input_.alg if search_generator else "Unknown", paused, finished, speed, \
+                          target if search_generator else -1, self.found)
 
             self.drawText("Search Algorithm Visualizer",
                           300, 30, 25, (25.5, 102, 127.5))

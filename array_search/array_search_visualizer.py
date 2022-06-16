@@ -37,7 +37,7 @@ class ArraySearchAlgorithmVisualizer:
         paused = False
         last_time = None
         speed = 1
-        
+        self.found = False
         running = True
         
         while running:
@@ -98,7 +98,8 @@ class ArraySearchAlgorithmVisualizer:
 
             self.drawFooterBackground()
             self.drawKeys(search_generator != None,
-                          input_.alg if search_generator else "Unknown", paused, finished, speed)
+                          input_.alg if search_generator else "Unknown", paused, finished, speed, \
+                          target if search_generator else -1, self.found)
 
             self.drawText("Search Algorithm Visualizer",
                           300, 30, 25, (25.5, 102, 127.5))
@@ -155,6 +156,7 @@ class ArraySearchAlgorithmVisualizer:
 
         if node.isTarget:
             glColor3f(green[0]/256, green[1]/256, green[2]/256)
+            self.found = True
         elif node.visited:
             glColor3f(gray[0]/256, gray[1]/256, gray[2]/256)
         elif node.visiting:
@@ -177,12 +179,21 @@ class ArraySearchAlgorithmVisualizer:
         drawNodeValue(window_size[0]/2+ox*window_size[0]/(coordinateSize[0]*2) - 9,
                       window_size[1]/2+oy*window_size[1]/(coordinateSize[1]*2)-14, node)
 
-    def drawKeys(self, searching, alg="BFS", paused=False, completed=False, speed=1):
+    def drawKeys(self, searching, alg="BFS", paused=False, completed=False, speed=1, target=-1, found=False):
         
         bg_color = 163, 214, 245
         gray = 128, 128, 128
         green = 0, 255, 0
         light_gray = 220, 220, 220
+        
+        if searching and not completed:
+            self.drawText(f"Searching for: {target}", 420, 200, 18, bg_color, (0, 0, 0))
+        
+        if searching and completed:
+            if found:
+                self.drawText(f"{target} - Exists!", 430, 200, 18, bg_color, (0, 0, 0))
+            else:
+                self.drawText(f"{target} - Not Found!", 430, 200, 18, bg_color, (0, 0, 0))
         
         
         
@@ -258,6 +269,7 @@ class ArraySearchAlgorithmVisualizer:
             x.isTarget = False
             x.visited = False
             x.visiting = False
+        self.found = False
 
     def drawText(self, text, x, y, fontSize=20, color=(255, 255, 255, 255), forg=(0, 255, 0, 255)):
         textSurface = pygame.font.SysFont('monospace', fontSize).render(
