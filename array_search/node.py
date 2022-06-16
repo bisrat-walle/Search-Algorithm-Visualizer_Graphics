@@ -5,6 +5,7 @@ class Node:
         self.visited = False
         self.val = val
         self.isTarget = False
+        self.visiting = False
 
     def __str__(self):
         return self.val
