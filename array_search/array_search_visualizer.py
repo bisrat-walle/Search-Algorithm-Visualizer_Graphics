@@ -17,13 +17,18 @@ coordinateSize = (10, 6)
 window_size = (1000, 600)
 
 
-def drawArray(array):
-    """ Draws the given <array> """
+class ArraySearchAlgorithmVisualizer:
 
-    j = 0
-    for i in range(-10, 10, 2):
-        drawNode(i + 1, 1, array[j])
-        j += 1
+    def __init__(self):
+        pass
+
+    def drawArray(self, array):
+        """ Draws the given <array> """
+
+        j = 0
+        for i in range(-10, 10, 2):
+            drawNode(i + 1, 1, array[j])
+            j += 1
 
 
 def drawNode(ox: int, oy: int, node: Node):
