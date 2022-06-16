@@ -62,7 +62,7 @@ class SearchInputReciever(Tk):
         screen_height = self.winfo_screenheight()
         window_width = 400
         window_height = 150
-        self.geometry(f'{window_width}x{window_height}+{int((screen_width-window_width)/2)}+{int((screen_height-window_height)/2+window_height/1.8)}')
+        self.geometry(f'{window_width}x{window_height}+{int((screen_width-window_width)/2)}+{int((screen_height-window_height)/2+window_height/1.2)}')
         
         # self.overrideredirect(1)
         self.attributes('-topmost', 1)
