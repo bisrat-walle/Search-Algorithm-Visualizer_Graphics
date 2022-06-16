@@ -12,7 +12,6 @@ if __name__ == "__main__":
         print(f"Choosen Algorithm Type: {choosen}")
         if choosen == "Graph Search":
             result = GraphAlgorithmVisualizer().result()
-            print(f"Result {result}")
         else:
             result = ArraySearchAlgorithmVisualizer().result()
     print("The application has been terminated!")
