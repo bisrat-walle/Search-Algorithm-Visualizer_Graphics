@@ -55,7 +55,7 @@ class SplashUserInput(Tk):
         Frame(self, width=380, height=50, bg="white").place(x=65, y=110)
         font = ('Calibri (Body)', 15, 'bold')
         app_title = Label(
-            self, text='Welocme to Search Algorithm Visualizer', font=font, bg="#249794")
+            self, text='Welcome to Search Algorithm Visualizer', font=font, bg="#249794")
         app_title.place(x=23, y=50)
 
         font = ('Calibri (Body)', 10, 'bold')
