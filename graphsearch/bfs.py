@@ -11,7 +11,7 @@ class BFS:
             current.visited = True
             if current.value == to_be_searched:
                 current.target = True
-                return True
+                yield True
             if current.left:
                 queue.append(current.left)
             if current.right:
