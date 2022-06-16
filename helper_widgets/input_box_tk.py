@@ -75,12 +75,12 @@ class SearchInputReciever(Tk):
         
         self.inputtxt = tk.Text(self,
                    height = 1,
-                   width = 10)
+                   width = 5)
         
         font=('Calibri (Body)',10,'bold')
         label1=Label(self,text="Enter the number to be searched: ", font=font, bg="white")
         label1.place(x=35, y=45)
-        self.inputtxt.place(x=270, y=47)
+        self.inputtxt.place(x=310, y=47)
         
         
         font=('Calibri (Body)',15,'bold')

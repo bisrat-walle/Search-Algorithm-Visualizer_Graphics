@@ -22,7 +22,7 @@ def drawArray(array):
 
     j = 0
     for i in range(-10, 10, 2):
-        drawNode(i + 1, 0, array[j])
+        drawNode(i + 1, 1, array[j])
         j += 1
 
 
@@ -30,9 +30,10 @@ def drawNode(ox: int, oy: int, node: Node):
     """ Draws a circle with radius <r> from origin <ox, oy> """
 
     r = .65  # radius
-    angle = 2*np.pi/100
+    angle = 2 * np.pi/100
     gray = 128, 128, 128
     green = 0, 255, 0
+    light_gray = 220, 220, 220
 
     def drawNodeValue(x: int, y: int, node: Node, fontSize: int = 25):
         """ Writes a text on the window """
@@ -41,13 +42,12 @@ def drawNode(ox: int, oy: int, node: Node):
 
         if node.isTarget:
             bg = (*green, 255)
-
-        elif not node.visited:
-            bg = (255, 255, 255, 255)
-        elif node.visiting:
-            bg = (1, 1, 1, 255)
-        else:
+        elif node.visited:
             bg = (*gray, 255)
+        elif node.visiting:
+            bg = (*light_gray, 255)
+        else:
+            bg = (255, 255, 255, 255)
 
         textSurface = pygame.font.SysFont('arial', fontSize).render(
             str(node.val), True, (47, 79, 79, 255), bg)
@@ -64,7 +64,7 @@ def drawNode(ox: int, oy: int, node: Node):
     elif node.visited:
         glColor3f(gray[0]/256, gray[1]/256, gray[2]/256)
     elif node.visiting:
-        glColor3f(1, 0, 1)
+        glColor3f(light_gray[0]/256, light_gray[1]/256, light_gray[2]/256)
     else:
         glColor3f(1, 1, 1)
 
@@ -86,15 +86,20 @@ def drawNode(ox: int, oy: int, node: Node):
 
 def drawKeys(searching, alg="BFS", paused=False, completed=False, speed=1):
 
+    bg_color = 163, 214, 245
+    gray = 128, 128, 128
+    green = 0, 255, 0
+    light_gray = 220, 220, 220
+
     keys_top_right = [
         ["Unexplored", (3, 3.5), (1, 1, 1)],
-        ["Visited", (3.84, 4.34), (1, 1, 0)],
-        ["Target", (4.68, 5.18), (0, 0, 1)],
+        ["Visited", (3.84, 4.34), (gray[0]/256, gray[1]/256, gray[2]/256)],
+        ["Target", (4.68, 5.18), (green[0]/256, green[1]/256, green[2]/256)],
     ]
 
     for index in range(len(keys_top_right)):
         drawText(keys_top_right[index][0],
-                 820, 450+(index)*42, 18, (0, 0, 0))
+                 820, 450+(index)*42, 18, bg_color, (0, 0, 0))
 
     for index in range(len(keys_top_right)):
         glColor3fv(keys_top_right[index][2])
@@ -158,9 +163,9 @@ def reset(array):
         x.visited = False
 
 
-def drawText(text, x, y, fontSize=20, color=(255, 255, 255, 255)):
+def drawText(text, x, y, fontSize=20, color=(255, 255, 255, 255), forg=(0, 255, 0, 255)):
     textSurface = pygame.font.SysFont('monospace', fontSize).render(
-        text, True, (0, 255, 0, 255), color)
+        text, True, forg, color)
     text_data = pygame.image.tostring(textSurface, "RGBA", True)
     glWindowPos2d(x, y)
     textWidth = textSurface.get_width()
