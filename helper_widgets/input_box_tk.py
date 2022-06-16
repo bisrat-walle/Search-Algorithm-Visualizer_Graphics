@@ -64,7 +64,7 @@ class SearchInputReciever(Tk):
         window_height = 150
         self.geometry(f'{window_width}x{window_height}+{int((screen_width-window_width)/2)}+{int((screen_height-window_height)/2+window_height/1.8)}')
         
-        self.overrideredirect(1)
+        # self.overrideredirect(1)
         self.attributes('-topmost', 1)
         Frame(self,width=500,height=285,bg="#249794").place(x=0,y=0)
         
