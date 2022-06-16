@@ -24,6 +24,7 @@ class ArraySearchAlgorithmVisualizer:
         pygame.init()
         display = window_size
         pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+        self.res = False
 
         glClearColor(0.6367, 0.8359, 0.9570, 1.0)
 
@@ -36,15 +37,21 @@ class ArraySearchAlgorithmVisualizer:
         paused = False
         last_time = None
         speed = 1
-
-        while True:
+        
+        running = True
+        
+        while running:
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
+                    running = False
 
                 if event.type == pygame.KEYDOWN:
+                    
+                    if event.key == K_BACKSPACE:
+                        self.res = True
+                        running = False
+                    
                     if event.key == K_1 and not search_generator:
                         input_ = SearchInputReciever("Linear Search")
                         target = input_.get_target()
@@ -98,6 +105,12 @@ class ArraySearchAlgorithmVisualizer:
 
             pygame.display.flip()
             pygame.time.wait(10)
+        
+        
+        pygame.quit()
+    
+    def result(self):
+        return self.res
 
     def drawArray(self, array):
         """ Draws the given <array> """
@@ -165,11 +178,15 @@ class ArraySearchAlgorithmVisualizer:
                       window_size[1]/2+oy*window_size[1]/(coordinateSize[1]*2)-14, node)
 
     def drawKeys(self, searching, alg="BFS", paused=False, completed=False, speed=1):
-
+        
         bg_color = 163, 214, 245
         gray = 128, 128, 128
         green = 0, 255, 0
         light_gray = 220, 220, 220
+        
+        
+        
+        self.drawText("BackSpace - to Return", 10, 550, 18, bg_color, (0, 0, 0))
 
         keys_top_right = [
             ["Unexplored", (3, 3.5), (1, 1, 1)],

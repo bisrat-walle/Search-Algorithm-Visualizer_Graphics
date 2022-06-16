@@ -3,12 +3,16 @@ from graphsearch.graph_search_visualizer import *
 from array_search.array_search_visualizer import *
 
 if __name__ == "__main__":
-    choosen = SplashUserInput().getInput()
-    if not choosen:
-        print("Window closed unexpectedly")
-        exit()
-    print(f"Choosen Algorithm Type: {choosen}")
-    if choosen == "Graph Search":
-        GraphAlgorithmVisualizer()
-    else:
-        ArraySearchAlgorithmVisualizer()
+    result = True
+    while result:
+        choosen = SplashUserInput().getInput()
+        if not choosen:
+            print("Window closed unexpectedly")
+            exit()
+        print(f"Choosen Algorithm Type: {choosen}")
+        if choosen == "Graph Search":
+            result = GraphAlgorithmVisualizer().result()
+            print(f"Result {result}")
+        else:
+            result = ArraySearchAlgorithmVisualizer().result()
+    print("The applicatin has been terminated!")

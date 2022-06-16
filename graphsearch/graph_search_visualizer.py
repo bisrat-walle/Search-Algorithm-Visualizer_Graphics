@@ -12,7 +12,6 @@ import time
 
 coordinateSize = (10, 6)
 window_size = (1000, 600)
-pygame.init()
 
 
 class GraphAlgorithmVisualizer:
@@ -30,13 +29,19 @@ class GraphAlgorithmVisualizer:
 
 
         """
+        
+        pygame.init()
         self.window = pygame.display.set_mode(window_size, DOUBLEBUF | OPENGL)
         gluOrtho2D(-1*coordinateSize[0], coordinateSize[0], -
                    1*coordinateSize[1], coordinateSize[1])
         pygame.display.set_caption("Search Algorithm Visualizer")
 
         self.font = pygame.font.SysFont('arial', 35)
+        self.res = False
         self.startVisualizer()
+    
+    def result(self):
+        return self.res
 
     def draw_node(self, posX, posY, node):
         radius = .5
@@ -128,7 +133,9 @@ class GraphAlgorithmVisualizer:
         glFlush()
 
     def drawKeys(self, searching, alg="BFS", paused=False, completed=False, speed=1):
-
+        
+        self.drawText("BackSpace - to Return", 10, 550, 18, (0, 0, 0))
+        
         keys_top_right = [
             ["Unexplored", (3, 3.5), (1, 1, 1)],
             ["Visited", (3.84, 4.34), (1, 1, 0)],
@@ -198,12 +205,12 @@ class GraphAlgorithmVisualizer:
         paused = False
         last_time = None
         speed = 1
-        while True:
+        running = True
+        while running:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
+                    running = False
                 if event.type == pygame.KEYDOWN:
                     if event.key == K_1 and not search_generator:
                         input_ = SearchInputReciever("BFS")
@@ -211,6 +218,11 @@ class GraphAlgorithmVisualizer:
                         if target != -1:
                             search_generator = BFS(graph).search(target)
                         last_time = time.time()
+                    
+                    if event.key == K_BACKSPACE:
+                        self.res = True
+                        running = False
+                        
 
                     if event.key == K_2 and not search_generator:
                         input_ = SearchInputReciever("DFS")
@@ -284,3 +296,5 @@ class GraphAlgorithmVisualizer:
 
             pygame.display.flip()
             pygame.time.wait(10)
+        
+        pygame.quit()
