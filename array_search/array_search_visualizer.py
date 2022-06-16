@@ -88,76 +88,76 @@ class ArraySearchAlgorithmVisualizer:
                       window_size[1]/2+oy*window_size[1]/(coordinateSize[1]*2)-14, node)
 
 
-def drawKeys(searching, alg="BFS", paused=False, completed=False, speed=1):
+    def drawKeys(self, searching, alg="BFS", paused=False, completed=False, speed=1):
 
-    bg_color = 163, 214, 245
-    gray = 128, 128, 128
-    green = 0, 255, 0
-    light_gray = 220, 220, 220
+        bg_color = 163, 214, 245
+        gray = 128, 128, 128
+        green = 0, 255, 0
+        light_gray = 220, 220, 220
 
-    keys_top_right = [
-        ["Unexplored", (3, 3.5), (1, 1, 1)],
-        ["Visited", (3.84, 4.34), (gray[0]/256, gray[1]/256, gray[2]/256)],
-        ["Target", (4.68, 5.18), (green[0]/256, green[1]/256, green[2]/256)],
-    ]
+        keys_top_right = [
+            ["Unexplored", (3, 3.5), (1, 1, 1)],
+            ["Visited", (3.84, 4.34), (gray[0]/256, gray[1]/256, gray[2]/256)],
+            ["Target", (4.68, 5.18), (green[0]/256, green[1]/256, green[2]/256)],
+        ]
 
-    for index in range(len(keys_top_right)):
-        drawText(keys_top_right[index][0],
-                 820, 450+(index)*42, 18, bg_color, (0, 0, 0))
+        for index in range(len(keys_top_right)):
+            drawText(keys_top_right[index][0],
+                    820, 450+(index)*42, 18, bg_color, (0, 0, 0))
 
-    for index in range(len(keys_top_right)):
-        glColor3fv(keys_top_right[index][2])
+        for index in range(len(keys_top_right)):
+            glColor3fv(keys_top_right[index][2])
+            glBegin(GL_QUADS)
+            glVertex2d(9.0, keys_top_right[index][1][0])
+            glVertex2d(9.5, keys_top_right[index][1][0])
+            glVertex2d(9.5, keys_top_right[index][1][1])
+            glVertex2d(9.0, keys_top_right[index][1][1])
+            glEnd()
+            glFlush()
+
+        def getStatus():
+            if completed:
+                return "Completed"
+            elif paused:
+                return "Paused"
+            return "Searching"
+
+        keys_left = [
+            "2 = Binary Search",
+            "1 = Linear Search",
+        ] if not searching else [
+            f"Current Status: {getStatus()}",
+            f"Current Speed : {speed}",
+            f"Algorithm     : {alg}"
+        ]
+
+        keys_right = [
+            "Space = Pause/Resume",
+            "↓     = Speed down",
+            "↑     = Speed up",
+        ]
+
+        for index in range(len(keys_left)):
+            drawText(keys_left[index], 10, 10 +
+                    (index)*42, 18, (25.5, 102, 127.5))
+        if searching:
+            for index in range(len(keys_right)):
+                drawText(keys_right[index], 750,
+                        10+(index)*42, 18, (25.5, 102, 127.5))
+        if completed:
+            drawText("3 = RESET", 450, 94, 18, (25.5, 102, 127.5))
+
+
+    def drawFooterBackground():
+
+        glColor3f(0.1, .4, .5)
         glBegin(GL_QUADS)
-        glVertex2d(9.0, keys_top_right[index][1][0])
-        glVertex2d(9.5, keys_top_right[index][1][0])
-        glVertex2d(9.5, keys_top_right[index][1][1])
-        glVertex2d(9.0, keys_top_right[index][1][1])
+        glVertex2d(-10, -3)
+        glVertex2d(10, -3)
+        glVertex2d(10, -6)
+        glVertex2d(-10, -6)
         glEnd()
         glFlush()
-
-    def getStatus():
-        if completed:
-            return "Completed"
-        elif paused:
-            return "Paused"
-        return "Searching"
-
-    keys_left = [
-        "2 = Binary Search",
-        "1 = Linear Search",
-    ] if not searching else [
-        f"Current Status: {getStatus()}",
-        f"Current Speed : {speed}",
-        f"Algorithm     : {alg}"
-    ]
-
-    keys_right = [
-        "Space = Pause/Resume",
-        "↓     = Speed down",
-        "↑     = Speed up",
-    ]
-
-    for index in range(len(keys_left)):
-        drawText(keys_left[index], 10, 10 +
-                 (index)*42, 18, (25.5, 102, 127.5))
-    if searching:
-        for index in range(len(keys_right)):
-            drawText(keys_right[index], 750,
-                     10+(index)*42, 18, (25.5, 102, 127.5))
-    if completed:
-        drawText("3 = RESET", 450, 94, 18, (25.5, 102, 127.5))
-
-
-def drawFooterBackground():
-
-    glColor3f(0.1, .4, .5)
-    glBegin(GL_QUADS)
-    glVertex2d(-10, -3)
-    glVertex2d(10, -3)
-    glVertex2d(10, -6)
-    glVertex2d(-10, -6)
-    glEnd()
-    glFlush()
 
 
 def reset(array):
