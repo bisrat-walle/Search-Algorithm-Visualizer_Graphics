@@ -17,18 +17,20 @@ coordinateSize = (10, 6)
 window_size = (1000, 600)
 
 
-def drawArray(arr):
-    """ Draw a the array """
+def drawArray(array):
+    """ Draws the given <array> """
 
     j = 0
     for i in range(-10, 10, 2):
-        drawCircle(i + 1, 0, arr[j])
+        drawNode(i + 1, 0, array[j])
         j += 1
 
 
-def drawCircle(ox: int, oy: int, node: Node):
+def drawNode(ox: int, oy: int, node: Node):
     """ Draws a circle with radius <r> from origin <ox, oy> """
 
+    r = .65  # radius
+    angle = 2*np.pi/100
     gray = 128, 128, 128
     green = 0, 255, 0
 
@@ -39,11 +41,11 @@ def drawCircle(ox: int, oy: int, node: Node):
 
         if node.isTarget:
             bg = (*green, 255)
-        
+
         elif not node.visited:
             bg = (255, 255, 255, 255)
         elif node.visiting:
-            bg = (1,1,1,255)
+            bg = (1, 1, 1, 255)
         else:
             bg = (*gray, 255)
 
@@ -55,17 +57,16 @@ def drawCircle(ox: int, oy: int, node: Node):
         glDrawPixels(textSurface.get_width(), textSurface.get_height(),
                      GL_RGBA, GL_UNSIGNED_BYTE, textData)
 
-    r = .65  # radius
-    angle = 2*np.pi/100
-
     glPolygonMode(GL_FRONT, GL_FILL)
 
     if node.isTarget:
         glColor3f(green[0]/256, green[1]/256, green[2]/256)
-    elif not node.visited:
-        glColor3f(1, 1, 1)
-    else:
+    elif node.visited:
         glColor3f(gray[0]/256, gray[1]/256, gray[2]/256)
+    elif node.visiting:
+        glColor3f(1, 0, 1)
+    else:
+        glColor3f(1, 1, 1)
 
     glBegin(GL_POLYGON)
 

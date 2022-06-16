@@ -7,6 +7,9 @@ def binary_search(arr, target: int = -1):
 
         mid = (l + r)//2
         
+        arr[mid].visiting = True
+        yield False
+        
         if arr[mid].val == target:
             arr[mid].isTarget = True
             return True
