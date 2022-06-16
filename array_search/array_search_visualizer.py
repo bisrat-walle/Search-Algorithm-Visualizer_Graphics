@@ -20,6 +20,7 @@ window_size = (1000, 600)
 class ArraySearchAlgorithmVisualizer:
 
     def __init__(self):
+
         pygame.init()
         display = window_size
         pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
@@ -178,8 +179,8 @@ class ArraySearchAlgorithmVisualizer:
         ]
 
         for index in range(len(keys_top_right)):
-            drawText(keys_top_right[index][0],
-                     820, 450+(index)*42, 18, bg_color, (0, 0, 0))
+            self.drawText(keys_top_right[index][0],
+                          820, 450+(index)*42, 18, bg_color, (0, 0, 0))
 
         for index in range(len(keys_top_right)):
             glColor3fv(keys_top_right[index][2])
@@ -214,14 +215,14 @@ class ArraySearchAlgorithmVisualizer:
         ]
 
         for index in range(len(keys_left)):
-            drawText(keys_left[index], 10, 10 +
-                     (index)*42, 18, (25.5, 102, 127.5))
+            self.drawText(keys_left[index], 10, 10 +
+                          (index)*42, 18, (25.5, 102, 127.5))
         if searching:
             for index in range(len(keys_right)):
-                drawText(keys_right[index], 750,
-                         10+(index)*42, 18, (25.5, 102, 127.5))
+                self.drawText(keys_right[index], 750,
+                              10+(index)*42, 18, (25.5, 102, 127.5))
         if completed:
-            drawText("3 = RESET", 450, 94, 18, (25.5, 102, 127.5))
+            self.drawText("3 = RESET", 450, 94, 18, (25.5, 102, 127.5))
 
     def drawFooterBackground(self):
 
@@ -241,7 +242,7 @@ class ArraySearchAlgorithmVisualizer:
             x.visited = False
             x.visiting = False
 
-    def drawText(text, x, y, fontSize=20, color=(255, 255, 255, 255), forg=(0, 255, 0, 255)):
+    def drawText(self, text, x, y, fontSize=20, color=(255, 255, 255, 255), forg=(0, 255, 0, 255)):
         textSurface = pygame.font.SysFont('monospace', fontSize).render(
             text, True, forg, color)
         text_data = pygame.image.tostring(textSurface, "RGBA", True)

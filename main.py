@@ -11,4 +11,4 @@ if __name__ == "__main__":
     if choosen == "Graph Search":
         GraphAlgorithmVisualizer()
     else:
-        main()
+        ArraySearchAlgorithmVisualizer()
