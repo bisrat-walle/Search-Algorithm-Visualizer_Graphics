@@ -21,81 +21,82 @@ class ArraySearchAlgorithmVisualizer:
 
     def __init__(self):
         pygame.init()
-    display = window_size
-    pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+        display = window_size
+        pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
 
-    glClearColor(0.6367, 0.8359, 0.9570, 1.0)
+        glClearColor(0.6367, 0.8359, 0.9570, 1.0)
 
-    xc, yc = coordinateSize
-    gluOrtho2D(-xc, xc, -yc, yc)
+        xc, yc = coordinateSize
+        gluOrtho2D(-xc, xc, -yc, yc)
 
-    arr = random_list_generator()  # the array
-    search_generator = None
-    finished = False
-    paused = False
-    last_time = None
-    speed = 1
+        arr = random_list_generator()  # the array
+        search_generator = None
+        finished = False
+        paused = False
+        last_time = None
+        speed = 1
 
-    while True:
-        for event in pygame.event.get():
+        while True:
+            for event in pygame.event.get():
 
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == K_1 and not search_generator:
-                    input_ = SearchInputReciever("Linear Search")
-                    target = input_.get_target()
-                    if target != -1:
-                        search_generator = linear_search(arr, target=target)
-                    last_time = time.time()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == K_1 and not search_generator:
+                        input_ = SearchInputReciever("Linear Search")
+                        target = input_.get_target()
+                        if target != -1:
+                            search_generator = linear_search(
+                                arr, target=target)
+                        last_time = time.time()
 
-                if event.key == K_2 and not search_generator:
-                    input_ = SearchInputReciever("Binary Search")
-                    target = input_.get_target()
-                    if target != -1:
-                        arr.sort(key=lambda x: x.val)
-                        search_generator = binary_search(arr, target)
-                    last_time = time.time()
+                    if event.key == K_2 and not search_generator:
+                        input_ = SearchInputReciever("Binary Search")
+                        target = input_.get_target()
+                        if target != -1:
+                            arr.sort(key=lambda x: x.val)
+                            search_generator = binary_search(arr, target)
+                        last_time = time.time()
 
-                if event.key == K_3 and search_generator and finished:
-                    reset(arr)
-                    search_generator = None
-                    finished = False
+                    if event.key == K_3 and search_generator and finished:
+                        self.reset(arr)
+                        search_generator = None
+                        finished = False
+                        speed = 1
+
+                    if event.key == K_SPACE and search_generator and not finished:
+                        paused = not paused
+                        last_time = time.time()
+
+                    if event.key == K_UP and search_generator and not finished:
+                        speed = min(4, speed+1)
+
+                    if event.key == K_DOWN and search_generator and not finished:
+                        speed = max(1, speed-1)
+
+            if not finished and not paused and search_generator and time.time() >= last_time+.5*(4-speed):
+                try:
+                    search_generator.__next__()
+                except StopIteration:
+                    finished = True
                     speed = 1
+                last_time = time.time()
 
-                if event.key == K_SPACE and search_generator and not finished:
-                    paused = not paused
-                    last_time = time.time()
+            glClear(GL_COLOR_BUFFER_BIT)
 
-                if event.key == K_UP and search_generator and not finished:
-                    speed = min(4, speed+1)
+            self.drawArray(arr)
 
-                if event.key == K_DOWN and search_generator and not finished:
-                    speed = max(1, speed-1)
+            self.drawFooterBackground()
+            self.drawKeys(search_generator != None,
+                          input_.alg if search_generator else "Unknown", paused, finished, speed)
 
-        if not finished and not paused and search_generator and time.time() >= last_time+.5*(4-speed):
-            try:
-                search_generator.__next__()
-            except StopIteration:
-                finished = True
-                speed = 1
-            last_time = time.time()
+            self.drawText("Search Algorithm Visualizer",
+                          300, 30, 25, (25.5, 102, 127.5))
 
-        glClear(GL_COLOR_BUFFER_BIT)
-
-        drawArray(arr)
-
-        drawFooterBackground()
-        drawKeys(search_generator != None,
-                 input_.alg if search_generator else "Unknown", paused, finished, speed)
-
-        drawText("Search Algorithm Visualizer",
-                 300, 30, 25, (25.5, 102, 127.5))
-
-        pygame.display.flip()
-        pygame.time.wait(10)
+            pygame.display.flip()
+            pygame.time.wait(10)
 
     def drawArray(self, array):
         """ Draws the given <array> """
@@ -249,4 +250,3 @@ class ArraySearchAlgorithmVisualizer:
         textHeight = textSurface.get_height()
         glDrawPixels(textWidth, textHeight, GL_RGBA,
                      GL_UNSIGNED_BYTE, text_data)
-
