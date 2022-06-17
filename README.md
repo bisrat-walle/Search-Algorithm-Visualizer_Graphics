@@ -10,8 +10,8 @@ This project is a graphical application which visualizes the most common search 
 
 * <a href="https://en.wikipedia.org/wiki/Depth-first_search"> Depth First Search (DFS) </a>
 * <a href="https://en.wikipedia.org/wiki/Breadth-first_search"> Breadth First Search (BFS) </a>
-* <a href="https://en.wikipedia.org/wiki/Breadth-first_search"> Linear Search </a>
-* <a href="https://en.wikipedia.org/wiki/Breadth-first_search"> Binary Search </a>
+* <a href="https://en.wikipedia.org/wiki/Linear_search"> Linear Search </a>
+* <a href="https://en.wikipedia.org/wiki/Binary_search_algorithm"> Binary Search </a>
 
 	
 ## Technologies
