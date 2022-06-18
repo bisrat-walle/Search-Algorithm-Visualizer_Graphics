@@ -56,7 +56,7 @@ class SplashUserInput(Tk):
         font = ('monospace', 15, 'bold')
         app_title = Label(
             self, text='Welcome to Search Algorithm Visualizer', font=font, bg="#249794")
-        app_title.place(x=65, y=50)
+        app_title.place(x=30, y=50)
 
         font = ('monospace', 10, 'bold')
         algorithm_type = ['Graph Search', 'Array Search']
@@ -77,7 +77,7 @@ class SplashUserInput(Tk):
                       fg='white', bg="#249794")
         font = ('monospace', 10)
         label.config(font=font)
-        label.place(x=260, y=255)
+        label.place(x=220, y=255)
 
         style = ttk.Style()
         style.configure("aqua.Horizontal.TProgressbar",
