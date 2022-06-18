@@ -19,6 +19,7 @@ Project is created with:
 * Python: 3.10.0
 * PyGame: 2.1.2
 * PyOpenGL: 3.1.6
+* Tkinter: 0.1.0
 
 	
 ## Setup
