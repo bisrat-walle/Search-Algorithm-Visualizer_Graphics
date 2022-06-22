@@ -33,6 +33,6 @@ $ "python main.py" for windows and "python3 main.py" for linux
 
 ## About Developers
 <pre>
-	1. <a href="https://github.com/bisrat-walle"> Bisrat Walle</a> ....... UGR/4425/12
-	2. <a href="https://github.com/dryeab"> Yeabsira Driba </a>..... UGR/4951/12
+	1. <a href="https://github.com/bisrat-walle"> Bisrat Walle</a>
+	2. <a href="https://github.com/dryeab"> Yeabsira Driba </a>
 </pre>
