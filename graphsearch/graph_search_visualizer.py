@@ -294,6 +294,8 @@ class GraphAlgorithmVisualizer:
 
             self.drawText("Search Algorithm Visualizer",
                           300, 30, 25, (25.5, 102, 127.5))
+            self.drawText("© Developed by Bisrat and Yeabsira, 2022",
+                          325, 10, 15, (25.5, 102, 127.5), (0, 0, 0))
 
             queue = deque([graph])
             i, startY = 0, 5
